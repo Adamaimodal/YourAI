@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Website</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Welcome to AI Website</h1>
+    
+    <div class="chat-container">
+        <h2>Chat with AI</h2>
+        <div id="chat-box"></div>
+        <input type="text" id="user-input" placeholder="Type a message...">
+        <button onclick="sendMessage()">Send</button>
+    </div>
+    
+    <div class="image-container">
+        <h2>Generate an AI Image</h2>
+        <input type="text" id="image-prompt" placeholder="Enter image description">
+        <button onclick="generateImage()">Generate Image</button>
+        <div id="image-result"></div>
+    </div>
+    
+    <div class="video-container">
+        <h2>Generate an AI Video</h2>
+        <input type="text" id="video-prompt" placeholder="Enter video description">
+        <button onclick="generateVideo()">Generate Video</button>
+        <div id="video-result"></div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
+/* style.css */
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 20px;
+}
+
+h1 {
+    color: #333;
+}
+
+.chat-container, .image-container, .video-container {
+    background: white;
+    padding: 20px;
+    margin: 20px auto;
+    width: 50%;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#chat-box {
+    height: 200px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    padding: 10px;
+    background: #fff;
+}
+
+input, button {
+    padding: 10px;
+    margin-top: 10px;
+    width: 80%;
+}
+
+button {
+    background: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #0056b3;
+}
+/* script.js */
+
+// Chatbot Function
+function sendMessage() {
+    let userInput = document.getElementById("user-input").value;
+    let chatBox = document.getElementById("chat-box");
+    
+    if (userInput.trim() === "") return;
+    
+    let userMessage = `<p><strong>You:</strong> ${userInput}</p>`;
+    chatBox.innerHTML += userMessage;
+    
+    fetch("https://api.openai.com/v1/completions", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer YOUR_OPENAI_API_KEY"
+        },
+        body: JSON.stringify({
+            model: "text-davinci-003",
+            prompt: userInput,
+            max_tokens: 100
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        let botMessage = `<p><strong>AI:</strong> ${data.choices[0].text.trim()}</p>`;
+        chatBox.innerHTML += botMessage;
+    })
+    .catch(error => console.error("Error:", error));
+}
+
+// Image Generation Function
+function generateImage() {
+    let imagePrompt = document.getElementById("image-prompt").value;
+    let imageResult = document.getElementById("image-result");
+    
+    fetch("https://api.openai.com/v1/images/generations", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer YOUR_OPENAI_API_KEY"
+        },
+        body: JSON.stringify({
+            prompt: imagePrompt,
+            n: 1,
+            size: "512x512"
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        imageResult.innerHTML = `<img src="${data.data[0].url}" alt="Generated Image">`;
+    })
+    .catch(error => console.error("Error:", error));
+}
+
+// Video Generation Function (Placeholder)
+function generateVideo() {
+    let videoPrompt = document.getElementById("video-prompt").value;
+    let videoResult = document.getElementById("video-result");
+    
+    videoResult.innerHTML = `<p>Video generation feature coming soon!</p>`;
+}
