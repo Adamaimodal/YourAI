@@ -1,66 +1,70 @@
-/* Modern Styling for AI Website */
-body {
-    font-family: Arial, sans-serif;
-    background-color: #121212;
-    color: #fff;
-    text-align: center;
-    margin: 0;
-    padding: 20px;
-}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Chat & Content Generator</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar for Navigation -->
+        <nav class="sidebar">
+            <h2>AI Tools</h2>
+            <ul>
+                <li onclick="showSection('chat')">Chatbot</li>
+                <li onclick="showSection('image')">Image Generator</li>
+                <li onclick="showSection('video')">Video Generator</li>
+                <li onclick="showSection('essay')">Essay Writer</li>
+            </ul>
+            <div class="theme-toggle">
+                <label>Dark Mode</label>
+                <input type="checkbox" id="dark-mode-toggle">
+            </div>
+        </nav>
 
-h1 {
-    font-size: 2rem;
-    margin-bottom: 20px;
-}
+        <!-- Main Content Area -->
+        <div class="content">
+            <h1>AI Chat & Content Generator</h1>
 
-/* Chatbot Styling */
-.chat-container, .image-container, .video-container {
-    background: #1e1e1e;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1);
-    margin: 20px auto;
-    width: 80%;
-    max-width: 500px;
-}
+            <!-- Chatbot Section -->
+            <div id="chat" class="section">
+                <div class="chat-container">
+                    <div id="chat-box"></div>
+                    <input type="text" id="user-input" placeholder="Type a message...">
+                    <button onclick="sendMessage()">Send</button>
+                </div>
+            </div>
 
-#chat-box {
-    height: 200px;
-    overflow-y: auto;
-    border: 1px solid #444;
-    padding: 10px;
-    border-radius: 5px;
-    background-color: #222;
-}
+            <!-- Image Generation Section -->
+            <div id="image" class="section hidden">
+                <div class="image-container">
+                    <input type="text" id="image-prompt" placeholder="Describe an image...">
+                    <button onclick="generateImage()">Generate Image</button>
+                    <div id="image-result"></div>
+                </div>
+            </div>
 
-input[type="text"] {
-    width: 80%;
-    padding: 10px;
-    margin: 10px 0;
-    border-radius: 5px;
-    border: none;
-    outline: none;
-    background: #333;
-    color: #fff;
-}
+            <!-- Video Generation Section -->
+            <div id="video" class="section hidden">
+                <div class="video-container">
+                    <input type="text" id="video-prompt" placeholder="Describe a video...">
+                    <button onclick="generateVideo()">Generate Video</button>
+                    <div id="video-result"></div>
+                </div>
+            </div>
 
-button {
-    background-color: #007bff;
-    color: #fff;
-    padding: 10px 15px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 1rem;
-}
+            <!-- Essay Writing Section -->
+            <div id="essay" class="section hidden">
+                <div class="essay-container">
+                    <input type="text" id="essay-prompt" placeholder="Enter essay topic...">
+                    <button onclick="generateEssay()">Generate Essay</button>
+                    <div id="essay-result"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
 
-button:hover {
-    background-color: #0056b3;
-}
-
-/* Image and Video Styling */
-#image-result img, #video-result video {
-    margin-top: 10px;
-    width: 100%;
-    border-radius: 10px;
-}
