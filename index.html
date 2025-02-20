@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Chat & Image Generator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>AI Chat & Image Generator</h1>
+    
+    <!-- Chatbot Section -->
+    <div class="chat-container">
+        <div id="chat-box"></div>
+        <input type="text" id="user-input" placeholder="Type a message...">
+        <button onclick="sendMessage()">Send</button>
+    </div>
+    
+    <!-- Image Generation Section -->
+    <div class="image-container">
+        <input type="text" id="image-prompt" placeholder="Describe an image...">
+        <button onclick="generateImage()">Generate Image</button>
+        <div id="image-result"></div>
+    </div>
+    
+    <!-- Video Generation Section -->
+    <div class="video-container">
+        <input type="text" id="video-prompt" placeholder="Describe a video...">
+        <button onclick="generateVideo()">Generate Video</button>
+        <div id="video-result"></div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
