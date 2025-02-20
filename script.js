@@ -1,63 +1,88 @@
-// JavaScript for AI Chatbot and Image Generation
-const API_KEY = "YOUR_OPENAI_API_KEY";
+document.addEventListener("DOMContentLoaded", () => {
+    // Dark Mode Toggle
+    const darkModeToggle = document.getElementById("dark-mode-toggle");
+    const body = document.body;
 
-// Function to handle chatbot messages
-async function sendMessage() {
-    const userInput = document.getElementById("user-input").value;
-    if (!userInput) return;
-
-    // Display user message
-    const chatBox = document.getElementById("chat-box");
-    chatBox.innerHTML += `<p><strong>You:</strong> ${userInput}</p>`;
-
-    // Call OpenAI API
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${API_KEY}`
-        },
-        body: JSON.stringify({
-            model: "gpt-3.5-turbo",
-            messages: [{ role: "user", content: userInput }]
-        })
+    darkModeToggle.addEventListener("change", () => {
+        body.classList.toggle("dark-mode", darkModeToggle.checked);
+        localStorage.setItem("darkMode", darkModeToggle.checked);
     });
 
-    const data = await response.json();
-    const botMessage = data.choices[0].message.content;
+    // Load Dark Mode Preference
+    if (localStorage.getItem("darkMode") === "true") {
+        body.classList.add("dark-mode");
+        darkModeToggle.checked = true;
+    }
 
-    // Display bot response
-    chatBox.innerHTML += `<p><strong>Bot:</strong> ${botMessage}</p>`;
-    document.getElementById("user-input").value = ""; // Clear input field
-}
+    // Section Switching
+    function showSection(sectionId) {
+        document.querySelectorAll(".section").forEach(section => {
+            section.classList.add("hidden");
+        });
+        document.getElementById(sectionId).classList.remove("hidden");
+    }
+    window.showSection = showSection;
 
-// Function to generate images
-async function generateImage() {
-    const prompt = document.getElementById("image-prompt").value;
-    if (!prompt) return;
+    // Chatbot Functionality
+    async function sendMessage() {
+        const userInput = document.getElementById("user-input").value;
+        if (!userInput) return;
+        const chatBox = document.getElementById("chat-box");
+        chatBox.innerHTML += `<p><strong>You:</strong> ${userInput}</p>`;
 
-    const response = await fetch("https://api.openai.com/v1/images/generations", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${API_KEY}`
-        },
-        body: JSON.stringify({
-            model: "dall-e-2",
-            prompt: prompt,
-            n: 1,
-            size: "512x512"
-        })
-    });
+        const response = await fetch("https://your-backend-url.onrender.com/chat", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ message: userInput })
+        });
 
-    const data = await response.json();
-    const imageUrl = data.data[0].url;
+        const data = await response.json();
+        const botMessage = data.choices[0].message.content;
+        chatBox.innerHTML += `<p><strong>Bot:</strong> ${botMessage}</p>`;
+        document.getElementById("user-input").value = "";
+    }
+    window.sendMessage = sendMessage;
 
-    // Display image result
-    document.getElementById("image-result").innerHTML = `<img src="${imageUrl}" alt="Generated Image">`;
-}
+    // Image Generation
+    async function generateImage() {
+        const prompt = document.getElementById("image-prompt").value;
+        if (!prompt) return;
+        const response = await fetch("https://your-backend-url.onrender.com/image", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ prompt })
+        });
+        const data = await response.json();
+        document.getElementById("image-result").innerHTML = `<img src="${data.url}" alt="Generated Image">`;
+    }
+    window.generateImage = generateImage;
 
-// Function to generate videos (Placeholder for future implementation)
-async function generateVideo() {
-    alert("Video generation is not yet implemented.");
-}
+    // Video Generation
+    async function generateVideo() {
+        const prompt = document.getElementById("video-prompt").value;
+        if (!prompt) return;
+        const response = await fetch("https://your-backend-url.onrender.com/video", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ prompt })
+        });
+        const data = await response.json();
+        document.getElementById("video-result").innerHTML = `<video controls><source src="${data.url}" type="video/mp4"></video>`;
+    }
+    window.generateVideo = generateVideo;
+
+    // Essay Generation
+    async function generateEssay() {
+        const prompt = document.getElementById("essay-prompt").value;
+        if (!prompt) return;
+        const response = await fetch("https://your-backend-url.onrender.com/essay", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ prompt })
+        });
+        const data = await response.json();
+        document.getElementById("essay-result").innerText = data.text;
+    }
+    window.generateEssay = generateEssay;
+});
+
